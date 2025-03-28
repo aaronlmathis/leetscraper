@@ -24,7 +24,41 @@ type DailyChallengeResponse struct {
     } `json:"data"`
 }
 
-func GetProblemOfTheDay() (DailyChallengeResponse, error) {
+type ProblemDetailsResponse struct {
+    Data struct {
+        Question struct {
+            QuestionId string `json:"questionFrontendId"`
+            Content string  `json:"content"`
+            CodeSnippets []struct {
+                Lang        string  `json:"lang"`
+                LangSlug    string  `json:"langSlug"`
+                Code        string  `json:"code"`
+            } `json:"codeSnippets"`
+            Title       string  `json:"title"`
+            Difficulty  string  `json:"difficulty"`
+        } `json:"question"`
+    } `json:"data"`
+}
+
+type DailyCodingChallengeQuestion struct {
+	Date string
+	Link string
+	TitleSlug string
+}
+
+type LeetCodeProblem struct {
+	Id string
+	Title string
+	Description string
+	Difficulty string
+	CodeSnippets []struct {
+        Lang		string `json:"lang"`
+        LangSlug	string `json:"langSlug"`
+        Code		string `json:"code"`
+	}
+} 
+
+func GetProblemOfTheDay() (DailyCodingChallengeQuestion, error) {
     payload := GraphQLPayload{
         Query: `query questionOfToday {
                     activeDailyCodingChallengeQuestion {
@@ -41,14 +75,14 @@ func GetProblemOfTheDay() (DailyChallengeResponse, error) {
     jsonBody, err := json.Marshal(payload)
     if err != nil {
         log.Printf("Error marshalling payload: %s", err)
-        return DailyChallengeResponse{}, err
+        return DailyCodingChallengeQuestion{}, err
     }
 
     // Create HTTP request
     req, err := http.NewRequest("POST", "https://leetcode.com/graphql", bytes.NewBuffer(jsonBody))
     if err != nil {
         log.Printf("Error creating request: %s", err)
-        return DailyChallengeResponse{}, err
+        return DailyCodingChallengeQuestion{}, err
     }
 
     req.Header.Set("Content-Type", "application/json")
@@ -58,7 +92,7 @@ func GetProblemOfTheDay() (DailyChallengeResponse, error) {
     res, err := client.Do(req)
     if err != nil {
         log.Printf("Error sending request: %s", err)
-        return DailyChallengeResponse{}, err
+        return DailyCodingChallengeQuestion{}, err
     }
     defer res.Body.Close()
 
@@ -67,31 +101,24 @@ func GetProblemOfTheDay() (DailyChallengeResponse, error) {
     err = json.NewDecoder(res.Body).Decode(&result)
     if err != nil {
         log.Printf("Error decoding JSON: %s", err)
-        return DailyChallengeResponse{}, err
+        return DailyCodingChallengeQuestion{}, err
     }
-
-    return result, nil
+	
+	dailyQuestion := DailyCodingChallengeQuestion {
+		Date: result.Data.ActiveDailyCodingChallengeQuestion.Date,
+		Link: result.Data.ActiveDailyCodingChallengeQuestion.Link,
+		TitleSlug: result.Data.ActiveDailyCodingChallengeQuestion.Question.TitleSlug,
+	}
+		
+	
+    return dailyQuestion, nil
 }
 
-type ProblemDetailsResponse struct {
-    Data struct {
-        Question struct {
-            Content string  `json:"content"`
-            CodeSnippets []struct {
-                Lang        string  `json:"lang"`
-                LangSlug    string  `json:"langSlug"`
-                Code        string  `json:"code"`
-            } `json:"codeSnippets"`
-            Title       string  `json:"Title"`
-            Difficulty  string  `json:"difficulty"`
-        } `json:"question"`
-    } `json:"data"`
-}
-
-func GetProblemDetails(titleSlug string) (ProblemDetailsResponse, error) {
+func GetProblemDetails(titleSlug string) (LeetCodeProblem, error) {
     payload := GraphQLPayload {
         Query: `query questionData($titleSlug: String!) {
             question(titleSlug: $titleSlug) {
+                questionFrontendId
                 content
                 codeSnippets {
                     lang
@@ -102,20 +129,23 @@ func GetProblemDetails(titleSlug string) (ProblemDetailsResponse, error) {
                 difficulty
             }
         }`,
+        Variables: map[string]interface{}{
+            "titleSlug": titleSlug,
+        },
     }
     
     // Marshal the payload into JSON
     jsonBody, err := json.Marshal(payload)
     if err != nil {
         log.Printf("Error marshalling payload: %s", err)
-        return ProblemDetailsResponse{}, err
+        return LeetCodeProblem{}, err
     }
 
     // Create HTTP request
     req, err := http.NewRequest("POST", "https://leetcode.com/graphql", bytes.NewBuffer(jsonBody))
     if err != nil {
         log.Printf("Error creating request: %s", err)
-        return ProblemDetailsResponse{}, err
+        return LeetCodeProblem{}, err
     }
 
     req.Header.Set("Content-Type", "application/json")
@@ -125,7 +155,7 @@ func GetProblemDetails(titleSlug string) (ProblemDetailsResponse, error) {
     res, err := client.Do(req)
     if err != nil {
         log.Printf("Error sending request: %s", err)
-        return ProblemDetailsResponse{}, err
+        return LeetCodeProblem{}, err
     }
     defer res.Body.Close()
 
@@ -134,9 +164,23 @@ func GetProblemDetails(titleSlug string) (ProblemDetailsResponse, error) {
     err = json.NewDecoder(res.Body).Decode(&result)
     if err != nil {
         log.Printf("Error decoding JSON: %s", err)
-        return ProblemDetailsResponse{}, err
+        return LeetCodeProblem{}, err
+    }
+	
+    markdownContent, err := ConvertHTMLToMarkdown(result.Data.Question.Content)
+    if err != nil {
+        log.Printf("Error converting html to markdown: %s", err)
+        return LeetCodeProblem{}, err
     }
 
-    return result, nil
+	problem := LeetCodeProblem{
+		Id: result.Data.Question.QuestionId,
+		Title: result.Data.Question.Title,
+        Description: markdownContent,
+        Difficulty: result.Data.Question.Difficulty,
+        CodeSnippets: result.Data.Question.CodeSnippets,
+    }
+
+    return problem, nil
 }
 

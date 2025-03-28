@@ -11,19 +11,22 @@ func main() {
     if err != nil {
         log.Printf("Error scraping problem of the day: %v", err)
     }
-    date := problemOfTheDay.Data.ActiveDailyCodingChallengeQuestion.Date
-    titleSlug := problemOfTheDay.Data.ActiveDailyCodingChallengeQuestion.Question.TitleSlug
-    url := "https://leetcode.com" + problemOfTheDay.Data.ActiveDailyCodingChallengeQuestion.Link
-    fmt.Printf(`Success! The Problem of the day for %s is at %s`, date, url)
+    date := problemOfTheDay.Date
+    titleSlug := problemOfTheDay.TitleSlug
+    url := "https://leetcode.com" + problemOfTheDay.Link
+    fmt.Printf("The Problem of the day for %v is at %v\n\n\n", date, url)
 
-    problemDetails, err := scraper.GetProblemDetails(titleSlug)
-    content := problemDetails.Data.Question.Content
-
+    leetCodeProblem, err := scraper.GetProblemDetails(titleSlug)
     if err != nil {
         log.Printf("Error getting problem details: %v", err)
     }
-    fmt.Printf("%s\n", content)
-
+    fmt.Printf("#%v - %v\n\n", leetCodeProblem.Id, leetCodeProblem.Title)
+    fmt.Printf("%v \n\n", leetCodeProblem.Description)
     
+    for _, snippet := range leetCodeProblem.CodeSnippets {
+        if snippet.LangSlug == "python3" || snippet.LangSlug == "golang" {
+            fmt.Printf("%v\n", snippet.Code)
+        }
+    }    
 }
 
