@@ -22,20 +22,20 @@
 ### 🐳 Download prebuilt binary
 
 
-Precompiled binaries are available for major platforms:
+Precompiled binaries are available inside archives for major platforms:
 
-- **Linux (x86_64)**: [etscraper-linuxhttps://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper-linux)
-- **macOS (arm64)**: [etscraper-darwinhttps://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper-darwin)
-- **Windows (x86_64)**: [etscraper.exehttps://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper.exe)
+- **Linux (x86_64)**: [leetscraper-linux.tar.gz](https://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper-linux.tar.gz)
+- **macOS (arm64)**: [leetscraper-darwin.tar.gz](https://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper-darwin.tar.gz)
+- **Windows (x86_64)**: [leetscraper-windows.zip](https://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper-windows.zip)
 
-Or visit the [Releases page](https://github.com/aaronlmathis/leetscraper/releases) to download archives or verify checksums.
+Or visit the [Releases page](https://github.com/aaronlmathis/leetscraper/releases) to download and verify checksums.
 
 ```sh
 # Example (Linux):
-curl -L -o leetscraper https://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper-linux
+curl -LO https://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper-linux.tar.gz
+tar -xzf leetscraper-linux.tar.gz
 chmod +x leetscraper
 ./leetscraper --help
-
 ```
 
 ### 🛠 Or build from source:
