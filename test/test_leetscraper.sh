@@ -21,7 +21,9 @@ fi
 cleanup() {
   echo "🧹 Cleaning up..."
   rm -rf "$TEST_DIR"
-  $RESTORE_CONFIG && mv "$CONFIG_FILE.bak" "$CONFIG_FILE"
+  if [[ "$RESTORE_CONFIG" == true ]]; then
+    mv "$CONFIG_FILE.bak" "$CONFIG_FILE"
+  fi
 }
 trap cleanup EXIT
 
@@ -79,3 +81,4 @@ fi
 echo "✅ Passed Test 4"
 
 echo "🎉 All tests passed!"
+exit 0

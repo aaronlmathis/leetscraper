@@ -23,8 +23,6 @@
 *.swo
 *.DS_Store
 
-# Go module files
-go.sum
 
 # Dependency directories (if vendoring)
 vendor/
