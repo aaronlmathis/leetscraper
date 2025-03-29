@@ -1,4 +1,5 @@
 # 🧠 LeetScraper
+[![GitHub release](https://img.shields.io/github/v/release/aaronlmathis/leetscraper?label=Download)](https://github.com/aaronlmathis/leetscraper/releases/latest)
 
 **LeetScraper** is a command-line tool that fetches the [LeetCode](https://leetcode.com) Daily Challenge (or any specific problem) and saves it as well-formatted, language-specific source files — complete with problem description, difficulty, and starter code.
 
@@ -20,8 +21,21 @@
 
 ### 🐳 Download prebuilt binary
 
-```bash
-# Coming soon via GitHub Releases
+
+Precompiled binaries are available for major platforms:
+
+- **Linux (x86_64)**: [etscraper-linuxhttps://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper-linux)
+- **macOS (arm64)**: [etscraper-darwinhttps://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper-darwin)
+- **Windows (x86_64)**: [etscraper.exehttps://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper.exe)
+
+Or visit the [Releases page](https://github.com/aaronlmathis/leetscraper/releases) to download archives or verify checksums.
+
+```sh
+# Example (Linux):
+curl -L -o leetscraper https://github.com/aaronlmathis/leetscraper/releases/latest/download/leetscraper-linux
+chmod +x leetscraper
+./leetscraper --help
+
 ```
 
 ### 🛠 Or build from source:
