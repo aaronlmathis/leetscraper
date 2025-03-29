@@ -1,0 +1,5 @@
+{
+    "outputDir": "/path/to/output/dir",
+    "filenameFormat": "{id}-{difficulty}-{title}.{ext}",
+    "languages": ["python3", "golang"]
+}

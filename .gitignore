@@ -1,31 +1,40 @@
-# Binaries for programs and plugins
+# Binary builds
 *.exe
-*.exe~
 *.dll
 *.so
 *.dylib
-
-# Test binary, output, coverage
 *.test
 *.out
+
+# Build artifacts
+/dist/
+/build/
+/bin/
+
+# Profiling and coverage
 *.prof
 *.coverprofile
 
-# Dependency directories (if you ever use vendoring)
-vendor/
-
-# Output folders
-/bin/
-/build/
-/dist/
-
-# IDE/editor settings
+# Editor and IDE settings
 .vscode/
 .idea/
+*.code-workspace
 *.swp
 *.swo
 *.DS_Store
 
-# Go module cache and workspace metadata
+# Go module files
 go.sum
 
+# Dependency directories (if vendoring)
+vendor/
+
+# Local or personal config
+.leetscraper.json
+
+# Archives (optional, if you generate them)
+*.tar.gz
+*.zip
+
+# Log files
+*.log
