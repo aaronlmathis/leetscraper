@@ -46,9 +46,9 @@ clean:
 release: $(VERSION_FILE)
 	@echo "📦 Building cross-platform binaries for v$(VERSION)..."
 	@mkdir -p $(DIST_DIR)
-	GOOS=linux   GOARCH=amd64 $(GO) build -ldflags="-X github.com/aaronlmathis/leetscraper/internal/version.Version=$(VERSION)" -o $(DIST_DIR)/$(APP_NAME)-linux   $(CMD_DIR)
-	GOOS=darwin  GOARCH=arm64 $(GO) build -ldflags="-X github.com/aaronlmathis/leetscraper/internal/version.Version=$(VERSION)" -o $(DIST_DIR)/$(APP_NAME)-darwin  $(CMD_DIR)
-	GOOS=windows GOARCH=amd64 $(GO) build -ldflags="-X github.com/aaronlmathis/leetscraper/internal/version.Version=$(VERSION)" -o $(DIST_DIR)/$(APP_NAME).exe     $(CMD_DIR)
+	GOOS=linux   GOARCH=amd64 $(GO) build -ldflags="-X github.com/aaronlmathis/leetscraper/internal/version.Version=$(VERSION)" -o $(DIST_DIR)/leetscraper-linux   $(CMD_DIR)
+	GOOS=darwin  GOARCH=arm64 $(GO) build -ldflags="-X github.com/aaronlmathis/leetscraper/internal/version.Version=$(VERSION)" -o $(DIST_DIR)/leetscraper-darwin  $(CMD_DIR)
+	GOOS=windows GOARCH=amd64 $(GO) build -ldflags="-X github.com/aaronlmathis/leetscraper/internal/version.Version=$(VERSION)" -o $(DIST_DIR)/leetscraper.exe     $(CMD_DIR)
 	@cd $(DIST_DIR) && sha256sum * > checksums.txt
 	@echo "✅ Binaries ready in $(DIST_DIR)/"
 
@@ -57,9 +57,14 @@ release: $(VERSION_FILE)
 package: release
 	@echo "📦 Packaging release archives..."
 	cd $(DIST_DIR) && \
-	tar -czf $(APP_NAME)-linux.tar.gz  $(APP_NAME)-linux && \
-	tar -czf $(APP_NAME)-darwin.tar.gz $(APP_NAME)-darwin && \
-	zip -j $(APP_NAME)-windows.zip $(APP_NAME).exe
+	mv leetscraper-linux leetscraper && \
+	tar -czf leetscraper-linux.tar.gz leetscraper && \
+	mv leetscraper leetscraper-linux && \
+	mv leetscraper-darwin leetscraper && \
+	tar -czf leetscraper-darwin.tar.gz leetscraper && \
+	mv leetscraper leetscraper-darwin && \
+	zip -j leetscraper-windows.zip leetscraper.exe
+
 
 ## Show this help
 .PHONY: help
