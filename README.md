@@ -52,7 +52,7 @@ make build
 ## 🚀 Usage
 
 ### ➤ Daily Challenge (default)
-
+Will default to pulling golang snippet, saving to working directory, using filename format: {id}-{difficulty}-{slug}.{ext} if .leetscraper.json is not present in home directory.
 ```bash
 leetscraper
 ```
@@ -74,12 +74,17 @@ leetscraper --out ~/leetcode/daily
 ```bash
 leetscraper --langs golang,python3,rust
 ```
-
+### ➤ File Naming 
+```bash
+leetscraper --format {id}-{difficulty}-{slug}.{ext}
 ---
 
 ## ⚙️ Configuration
+Set your preferences (optional) via .leetscraper.json saved to home directory.
 
-Optional `~/.leetscraper.json`:
+See `leetscraper.json.sample` for example.
+
+`~/.leetscraper.json`:
 
 ```json
 {
