@@ -77,6 +77,7 @@ leetscraper --langs golang,python3,rust
 ### ➤ File Naming 
 ```bash
 leetscraper --format {id}-{difficulty}-{slug}.{ext}
+```
 ---
 
 ## ⚙️ Configuration
